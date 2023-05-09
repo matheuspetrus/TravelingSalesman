@@ -1,29 +1,91 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class SetLines : MonoBehaviour
 {
-    [SerializeField] private Transform[] points;
+    [SerializeField] private int numberOfRouteTests;
+    [SerializeField] private int currentTestRoute;
+    
+    
+    [SerializeField] private List<Transform> points;
+    
+    [SerializeField] private List<Transform> bestRoute;
+    [SerializeField] private List<Transform> secondBestRoute;
+    
+    [SerializeField] private List<Transform> newGeneration;
+    
     [SerializeField] private LineController line;
+    [SerializeField] private float distance;
+
+    [SerializeField] private float bestDistance;
+    [SerializeField] private float secondBestDistance;
+
+    [SerializeField] private int generation;
+
+    [SerializeField] private float chanceOfMutation;
+
+    [SerializeField] private bool _isStart;
+    private float mutation;
     
-    
-    // Start is called before the first frame update
     void Start()
     {
+        generation = 0;
+        currentTestRoute = numberOfRouteTests;
+        RandomListInitializing();
+        CheckDistance();
+        line.SetUpline(points);
+
+        bestDistance = distance;
+        secondBestDistance = distance;
+    }
+
+    private void Update()
+    {
+        if (currentTestRoute<numberOfRouteTests)
+        {
+            if (generation==1)
+            {
+                NewRandomRoutes();
+            }
+            else
+            {
+                NewRoutes();
+            }
+          
+            currentTestRoute++;
+        }
+    }
+    
+    [ContextMenu("Start Test Routes")]
+    public void StartTestRoutes()
+    {
+        generation ++;
+        currentTestRoute = 0;
+    }
+
+    public void NewRandomRoutes()
+    {
         RandomList();
-        
+        CheckDistance();
+        line.SetUpline(points);
+    }
+    public void NewRoutes()
+    {
+        GenerationList();
+        CheckDistance();
         line.SetUpline(points);
     }
 
-    void RandomList()
+    void RandomListInitializing()
     {
-        for (int i = 1; i < points.Length; i++)
+        for (int i = 1; i < points.Count; i++)
         {
             // Gera um índice aleatório
-            int randomIndex = Random.Range(1, points.Length);
+            int randomIndex = Random.Range(1, points.Count);
 
             // Troca os valores entre as posições correspondentes aos índices sorteados
             Transform  temp = points[i];
@@ -31,9 +93,137 @@ public class SetLines : MonoBehaviour
             points[randomIndex] = temp;
         }
         
-        Array.Resize(ref points, points.Length+1);
+        //Array.Resize(ref points, points.Length+1);
         
-        points[points.Length-1] = points[0];
+        points.Add(points[0]);
     }
 
+    void RandomList()
+    {
+
+        for (int i = 1; i < points.Count-1; i++)
+        {
+            // Gera um índice aleatório
+            int randomIndex = Random.Range(1, points.Count-1);
+
+            // Troca os valores entre as posições correspondentes aos índices sorteados
+            Transform  temp = points[i];
+            points[i] = points[randomIndex];
+            points[randomIndex] = temp;
+        }
+       // points[points.Count]=points[0];
+    }
+
+    private void GenerationList()
+    {
+        NewGeneration();
+        points =new List<Transform>();
+
+        for (int i = 0; i < newGeneration.Count; i++)
+        {
+            Transform  temp = newGeneration[i];
+            points.Add(temp);
+        }
+
+        mutation = Random.Range(0, 100);
+
+        if (mutation<=chanceOfMutation)
+        {
+            Debug.Log($"mutation");
+                      
+            
+            int randomIndex = Random.Range(1, points.Count-1);
+            int newRandomIndex = Random.Range(1, points.Count-1);
+            Transform  temp = points[newRandomIndex];
+            points[newRandomIndex] = points[randomIndex];
+            points[randomIndex] = temp;
+        }
+    }
+
+    void CheckDistance()
+    {
+        distance = 0;
+        
+        for (int i = 0; i < points.Count-1; i++)
+        {
+            distance += Vector3.Distance(points[i].position, points[i + 1].position);
+        }
+
+        if (distance<bestDistance&&distance>0f)
+        {
+            bestDistance = distance;
+            bestRoute = new List<Transform>();
+            
+            for (int i = 0; i < points.Count; i++)
+            {
+                Transform  temp = points[i];
+                bestRoute.Add(temp);
+            }
+
+       
+
+        }else if (distance<secondBestDistance && distance>bestDistance &&distance>0f)
+        {
+            secondBestRoute = new List<Transform>();
+            
+            secondBestDistance = distance;
+            for (int i = 0; i < points.Count; i++)
+            {
+                Transform  temp = points[i];
+                secondBestRoute.Add(temp);
+            }
+        }
+    }
+    [ContextMenu("Show Best Route")]
+    public void ShowBestRoute()
+    {
+        points = bestRoute;
+        
+        CheckDistance();
+        line.SetUpline(points);
+    }
+    [ContextMenu("Show Second Best Route")]
+    public void ShowSecondBestRoute()
+    {
+        points = secondBestRoute;
+        
+        CheckDistance();
+        line.SetUpline(points);
+    }
+    [ContextMenu("New Generation")]
+    private void NewGeneration()
+    {
+        bool isCityfree = true;
+        
+        newGeneration  = new List<Transform>();
+        
+        for (int i = 0; i < bestRoute.Count/2; i++)
+        {
+            Transform  temp = bestRoute[i];
+            newGeneration.Add(temp);
+        }
+
+        for (int i = 0; i < secondBestRoute.Count; i++)
+        {
+       
+            for (int j = 0; j < newGeneration.Count; j++)
+            {
+                isCityfree = true;
+                if (newGeneration[j].GetComponent<City>().idCity == secondBestRoute[i].GetComponent<City>().idCity )
+                {
+                    isCityfree = false;
+                    break;
+                }
+            }
+
+            if (isCityfree)
+            {
+                Transform  temp = secondBestRoute[i];
+                newGeneration.Add(temp);
+            }
+          
+        }
+        
+       newGeneration.Add(bestRoute[0]);
+    }
 }

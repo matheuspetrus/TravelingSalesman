@@ -7,24 +7,31 @@ public class LineController : MonoBehaviour
 {
     public LineRenderer line;
 
-    private Transform[] points;
+    private List<Transform>points;
 
     private void Awake()
     {
         line = GetComponent<LineRenderer>();
     }
 
-    public void SetUpline(Transform[] points)
+    public void SetUpline(List<Transform> _points)
     {
-        line.positionCount = points.Length;
-        this.points = points;
+        if (points!=null)
+        {
+            //points.Clear();
+            points = new List<Transform>();
+        }
+        
+        
+        line.positionCount = _points.Count;
+        points = _points;
     }
     
   
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < points.Length; i++)
+        for (int i = 0; i < points.Count; i++)
         {
             line.SetPosition(i,points[i].position);
         }
