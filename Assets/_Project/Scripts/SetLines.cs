@@ -36,19 +36,6 @@ public class SetLines : MonoBehaviour
     
     void Start()
     {
-        mutations = 0;
-        timeNewTest = (numberOfRouteTests * 4) /10;
-        _isStart = false;
-        generation = 0;
-        currentTestRoute = numberOfRouteTests;
-        RandomListInitializing();
-        CheckDistance();
-        line.SetUpline(points);
-
-        bestDistance = distance;
-        secondBestDistance = distance;
-        
-        //InvokeRepeating("StartTestRoutes", 3.0f, 3.0f);
     }
 
     private void Update()
@@ -76,6 +63,38 @@ public class SetLines : MonoBehaviour
             StartTestRoutes();
             currentTimeNewTest = 0;
         }
+    }
+
+    [ContextMenu("Initializing")]
+    public void Initializing()
+    {
+        mutations = 0;
+        timeNewTest = (numberOfRouteTests * 3) /10;
+        _isStart = false;
+        generation = 0;
+        currentTestRoute = numberOfRouteTests;
+        RandomListInitializing();
+        CheckDistance();
+        line.SetUpline(points);
+
+        bestDistance = distance;
+        secondBestDistance = distance;
+    }
+    [ContextMenu("ResetTests")]
+    public void ResetTests()
+    {
+        mutations = 0;
+        timeNewTest = (numberOfRouteTests * 3) /10;
+        _isStart = false;
+        generation = 0;
+        currentTestRoute = numberOfRouteTests;
+        bestDistance = 0;
+        secondBestDistance = 0;
+        
+         points=new List<Transform>();
+         bestRoute=new List<Transform>();
+         secondBestRoute=new List<Transform>();
+         newGeneration=new List<Transform>();
     }
     
     [ContextMenu("Start Test Routes")]
