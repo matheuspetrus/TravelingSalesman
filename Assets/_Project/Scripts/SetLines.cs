@@ -11,7 +11,7 @@ public class SetLines : MonoBehaviour
     private int currentTestRoute;
     
     
-    [SerializeField] private List<Transform> points;
+    public List<Transform> points;
     
     [SerializeField] private List<Transform> bestRoute;
     [SerializeField] private List<Transform> secondBestRoute;
@@ -31,18 +31,19 @@ public class SetLines : MonoBehaviour
     private float timeNewTest;
     private float currentTimeNewTest;
     
-    [SerializeField] private bool _isStart;
+    [SerializeField] private bool _isStart = false;
     private float mutation;
     
     void Start()
     {
+        Time.timeScale = 20f;
     }
 
     private void Update()
     {
-        timeNewTest = (numberOfRouteTests * 3) /10;
+        timeNewTest = (numberOfRouteTests * 4) /10;
         
-        if (currentTestRoute<numberOfRouteTests)
+        if (currentTestRoute<numberOfRouteTests  && points.Count >0)
         {
             if (generation==1)
             {
@@ -65,11 +66,17 @@ public class SetLines : MonoBehaviour
         }
     }
 
+    public void AddPoint(Transform newCity)
+    {
+        points.Add(newCity);
+    }
+    
+
     [ContextMenu("Initializing")]
     public void Initializing()
     {
         mutations = 0;
-        timeNewTest = (numberOfRouteTests * 3) /10;
+        timeNewTest = (numberOfRouteTests * 4) /10;
         _isStart = false;
         generation = 0;
         currentTestRoute = numberOfRouteTests;
@@ -79,12 +86,16 @@ public class SetLines : MonoBehaviour
 
         bestDistance = distance;
         secondBestDistance = distance;
+        
+        Debug.Log($"Initializing");
     }
     [ContextMenu("ResetTests")]
     public void ResetTests()
     {
+        line.Clear();
+        
         mutations = 0;
-        timeNewTest = (numberOfRouteTests * 3) /10;
+        timeNewTest = (numberOfRouteTests * 4) /10;
         _isStart = false;
         generation = 0;
         currentTestRoute = numberOfRouteTests;
@@ -95,6 +106,7 @@ public class SetLines : MonoBehaviour
          bestRoute=new List<Transform>();
          secondBestRoute=new List<Transform>();
          newGeneration=new List<Transform>();
+         Debug.Log($"ResetTests");
     }
     
     [ContextMenu("Start Test Routes")]
@@ -109,6 +121,8 @@ public class SetLines : MonoBehaviour
     }
 
 
+    
+    
     public void StartTestRoutes()
     {
         if (_isStart)
@@ -124,12 +138,14 @@ public class SetLines : MonoBehaviour
         RandomList();
         CheckDistance();
         line.SetUpline(points);
+        Debug.Log($"NewRandomRoutes");
     }
     public void NewRoutes()
     {
         GenerationList();
         CheckDistance();
         line.SetUpline(points);
+        Debug.Log($"NewRoutes");
     }
 
     void RandomListInitializing()
@@ -234,6 +250,7 @@ public class SetLines : MonoBehaviour
         
         CheckDistance();
         line.SetUpline(points);
+        Debug.Log($"ShowBestRoute");
     }
     [ContextMenu("Show Second Best Route")]
     public void ShowSecondBestRoute()
@@ -242,6 +259,7 @@ public class SetLines : MonoBehaviour
         
         CheckDistance();
         line.SetUpline(points);
+        Debug.Log($"ShowSecondBestRoute");
     }
     private void NewGeneration()
     {

@@ -7,7 +7,7 @@ public class LineController : MonoBehaviour
 {
     public LineRenderer line;
 
-    private List<Transform>points;
+   [SerializeField] private List<Transform>points;
 
     private void Awake()
     {
@@ -26,14 +26,28 @@ public class LineController : MonoBehaviour
         line.positionCount = _points.Count;
         points = _points;
     }
-    
+
+    public void Clear()
+    {
+        if (points!=null)
+        {
+            //points.Clear();
+            points = new List<Transform>();
+            line.positionCount=0;
+        }
+
+    }
   
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < points.Count; i++)
+        if (points.Count>0 && points!=null)
         {
-            line.SetPosition(i,points[i].position);
+            for (int i = 0; i < points.Count; i++)
+            {
+                line.SetPosition(i,points[i].position);
+            }
         }
+      
     }
 }
