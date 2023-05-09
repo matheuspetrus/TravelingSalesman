@@ -679,8 +679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0525c4c6ee7e974a9944f43b1cb87ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfRouteTests: 25
-  currentTestRoute: 0
+  numberOfRouteTests: 10
   points:
   - {fileID: 1543354895}
   - {fileID: 44081661}
@@ -693,10 +692,10 @@ MonoBehaviour:
   secondBestRoute: []
   newGeneration: []
   line: {fileID: 1033676887}
-  distance: 0
   bestDistance: 0
   secondBestDistance: 0
   generation: 1
+  mutations: 0
   chanceOfMutation: 10
   _isStart: 1
 --- !u!1 &1033676885

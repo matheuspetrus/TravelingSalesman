@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class SetLines : MonoBehaviour
 {
     [SerializeField] private int numberOfRouteTests;
-    [SerializeField] private int currentTestRoute;
+    private int currentTestRoute;
     
     
     [SerializeField] private List<Transform> points;
@@ -19,20 +19,26 @@ public class SetLines : MonoBehaviour
     [SerializeField] private List<Transform> newGeneration;
     
     [SerializeField] private LineController line;
-    [SerializeField] private float distance;
+    private float distance;
 
     [SerializeField] private float bestDistance;
     [SerializeField] private float secondBestDistance;
 
     [SerializeField] private int generation;
-
+    [SerializeField] private int mutations;
     [SerializeField] private float chanceOfMutation;
-
+    
+    private float timeNewTest;
+    private float currentTimeNewTest;
+    
     [SerializeField] private bool _isStart;
     private float mutation;
     
     void Start()
     {
+        mutations = 0;
+        timeNewTest = (numberOfRouteTests * 4) /10;
+        _isStart = false;
         generation = 0;
         currentTestRoute = numberOfRouteTests;
         RandomListInitializing();
@@ -41,10 +47,14 @@ public class SetLines : MonoBehaviour
 
         bestDistance = distance;
         secondBestDistance = distance;
+        
+        //InvokeRepeating("StartTestRoutes", 3.0f, 3.0f);
     }
 
     private void Update()
     {
+        timeNewTest = (numberOfRouteTests * 3) /10;
+        
         if (currentTestRoute<numberOfRouteTests)
         {
             if (generation==1)
@@ -58,13 +68,36 @@ public class SetLines : MonoBehaviour
           
             currentTestRoute++;
         }
+
+        currentTimeNewTest += Time.deltaTime;
+
+        if (currentTimeNewTest>timeNewTest &&_isStart)
+        {
+            StartTestRoutes();
+            currentTimeNewTest = 0;
+        }
     }
     
     [ContextMenu("Start Test Routes")]
+    public void StartTests()
+    {
+        _isStart = true;
+    }
+    [ContextMenu("Stop Test Routes")]
+    public void StopTests()
+    {
+        _isStart = false;
+    }
+
+
     public void StartTestRoutes()
     {
-        generation ++;
-        currentTestRoute = 0;
+        if (_isStart)
+        {
+            generation ++;
+            currentTestRoute = 0;
+        }
+  
     }
 
     public void NewRandomRoutes()
@@ -129,8 +162,9 @@ public class SetLines : MonoBehaviour
 
         if (mutation<=chanceOfMutation)
         {
-            Debug.Log($"mutation");
-                      
+            //Debug.Log($"mutation");
+
+            mutations++;            
             
             int randomIndex = Random.Range(1, points.Count-1);
             int newRandomIndex = Random.Range(1, points.Count-1);
