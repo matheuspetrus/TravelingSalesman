@@ -224,7 +224,6 @@ public class SetLines : MonoBehaviour
         CheckDistance();
         line.SetUpline(points);
     }
-    [ContextMenu("New Generation")]
     private void NewGeneration()
     {
         bool isCityfree = true;
