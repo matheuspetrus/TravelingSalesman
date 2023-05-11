@@ -20,7 +20,7 @@ public class SpawsCitys : MonoBehaviour
         for (int i = 0; i < countCitys; i++)
         {
             GameObject obj = Instantiate(_cityPrefab, new Vector3(Random.Range(MinX, MaxX), 0, Random.Range(MinZ, MaxZ)),
-                Quaternion.identity);
+                _cityPrefab.transform.rotation);
             
             _set.AddPoint(obj.transform);
         }
