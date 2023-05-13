@@ -36,7 +36,7 @@ public class SetLines : MonoBehaviour
     
     void Start()
     {
-        Time.timeScale = 20f;
+    //    Time.timeScale = 20f;
     }
 
     private void Update()

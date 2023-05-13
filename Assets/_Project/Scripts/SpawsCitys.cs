@@ -21,6 +21,11 @@ public class SpawsCitys : MonoBehaviour
         {
             GameObject obj = Instantiate(_cityPrefab, new Vector3(Random.Range(MinX, MaxX), 0, Random.Range(MinZ, MaxZ)),
                 _cityPrefab.transform.rotation);
+
+            if (i==0)
+            {
+                obj.GetComponent<City>().StartFlag();
+            }
             
             _set.AddPoint(obj.transform);
         }

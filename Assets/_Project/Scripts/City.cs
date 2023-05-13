@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class City : MonoBehaviour
 {
     public int idCity;
-
+    public GameObject flag;
     public GameObject[] _citysPrefabs;
     
     private void Start()
@@ -20,5 +20,10 @@ public class City : MonoBehaviour
        GameObject obj = Instantiate(_citysPrefabs[rand], transform.position,transform.rotation);
        
      
+    }
+
+    public void StartFlag()
+    {
+        flag.SetActive(true);
     }
 }
