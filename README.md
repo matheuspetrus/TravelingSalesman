@@ -8,7 +8,8 @@ Neste trabalho  é apresentado uma solução para o famoso problema do caixeiro 
 
 O Problema do Caixeiro Viajante é um problema que tenta determinar a menor rota para percorrer uma série de cidades (visitando uma única vez cada uma delas), retornando à cidade de origem. Ele é um problema de otimização difícil inspirado na necessidade dos vendedores em realizar entregas em diversos locais (as cidades) percorrendo o menor caminho possível, reduzindo o tempo necessário para a viagem e os possíveis custos com transporte e combustível.
 
-https://github.com/matheuspetrus/TravelingSalesman/edit/main/ArquivosReadme/4.mp4
+
+https://github.com/matheuspetrus/TravelingSalesman/assets/40836900/b0365ebf-b346-4dcf-a426-72eac3fed167
 
 Primeiramente é gerado uma sequência de caminhos aleatórios, após esse sorteio de caminhos, ele pega o primeiro e o segundo caminhos com a menor distância e gera uma um novo caminho juntando os dois, usando a primeira metade das cidades da lista do melhor caminho e completando o restante de acordo com a lista do segundo melhor caminho.
 
