@@ -111,8 +111,8 @@ public class SetLines : MonoBehaviour
         bestDistance = distance;
         secondBestDistance = distance;
         
-        _textBestRoute.text = bestDistance.ToString();
-        _textBestSecondBestRoute.text = secondBestDistance.ToString();
+        _textBestRoute.text = bestDistance.ToString("N2");
+        _textBestSecondBestRoute.text = secondBestDistance.ToString("N2");
         Debug.Log($"Initializing");
     }
     [ContextMenu("ResetTests")]
@@ -130,8 +130,8 @@ public class SetLines : MonoBehaviour
         bestDistance = 0;
         secondBestDistance = 0;
 
-        _textBestRoute.text = bestDistance.ToString();
-        _textBestSecondBestRoute.text = secondBestDistance.ToString();
+        _textBestRoute.text = bestDistance.ToString("N2");
+        _textBestSecondBestRoute.text = secondBestDistance.ToString("N2");
          points=new List<Transform>();
          bestRoute=new List<Transform>();
          secondBestRoute=new List<Transform>();
@@ -252,7 +252,7 @@ public class SetLines : MonoBehaviour
         if (distance<bestDistance&&distance>0f)
         {
             bestDistance = distance;
-            _textBestRoute.text = bestDistance.ToString();
+            _textBestRoute.text = bestDistance.ToString("N2");
             bestRoute = new List<Transform>();
             
             for (int i = 0; i < points.Count; i++)
@@ -268,7 +268,7 @@ public class SetLines : MonoBehaviour
             secondBestRoute = new List<Transform>();
             
             secondBestDistance = distance;
-            _textBestRoute.text = secondBestDistance.ToString();
+            _textBestRoute.text = secondBestDistance.ToString("N2");
             for (int i = 0; i < points.Count; i++)
             {
                 Transform  temp = points[i];
