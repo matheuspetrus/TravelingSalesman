@@ -17,7 +17,7 @@ public class City : MonoBehaviour
 
         int rand = Random.Range(0, _citysPrefabs.Length);
         
-       GameObject obj = Instantiate(_citysPrefabs[rand], transform.position,transform.rotation);
+       GameObject obj = Instantiate(_citysPrefabs[rand], transform.position,transform.rotation,transform);
        
      
     }

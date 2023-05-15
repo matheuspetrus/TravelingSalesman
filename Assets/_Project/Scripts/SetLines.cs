@@ -1,12 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class SetLines : MonoBehaviour
 {
+
+    [SerializeField] private TMP_Text _textGeneration;
+    [SerializeField] private TMP_Text _textMutations;
+    [SerializeField] private TMP_Text _textBestRoute;
+    [SerializeField] private TMP_Text _textBestSecondBestRoute;
+    
+    [SerializeField] private TMP_Text _textSliderMutations;
+    [SerializeField] private TMP_Text _textNumberOfRouteTests;
+
+    [SerializeField] private Slider _sliderMutations;
+    [SerializeField] private Slider _sliderNumberOfRouteTests;
+    
     [SerializeField] private int numberOfRouteTests;
     private int currentTestRoute;
     
@@ -41,6 +55,13 @@ public class SetLines : MonoBehaviour
 
     private void Update()
     {
+        chanceOfMutation = _sliderMutations.value;
+        numberOfRouteTests = (int)_sliderNumberOfRouteTests.value;
+
+        _textSliderMutations.text = $"Mutação: {chanceOfMutation}%";
+        _textNumberOfRouteTests.text = $"Testes: {numberOfRouteTests}";
+        
+        
         timeNewTest = (numberOfRouteTests * 4) /10;
         
         if (currentTestRoute<numberOfRouteTests  && points.Count >0)
@@ -59,7 +80,7 @@ public class SetLines : MonoBehaviour
 
         currentTimeNewTest += Time.deltaTime;
 
-        if (currentTimeNewTest>timeNewTest &&_isStart)
+        if (currentTestRoute>=numberOfRouteTests &&_isStart && currentTimeNewTest>=timeNewTest)
         {
             StartTestRoutes();
             currentTimeNewTest = 0;
@@ -79,6 +100,9 @@ public class SetLines : MonoBehaviour
         timeNewTest = (numberOfRouteTests * 4) /10;
         _isStart = false;
         generation = 0;
+
+        _textGeneration.text = generation.ToString();
+        
         currentTestRoute = numberOfRouteTests;
         RandomListInitializing();
         CheckDistance();
@@ -87,6 +111,8 @@ public class SetLines : MonoBehaviour
         bestDistance = distance;
         secondBestDistance = distance;
         
+        _textBestRoute.text = bestDistance.ToString();
+        _textBestSecondBestRoute.text = secondBestDistance.ToString();
         Debug.Log($"Initializing");
     }
     [ContextMenu("ResetTests")]
@@ -98,10 +124,14 @@ public class SetLines : MonoBehaviour
         timeNewTest = (numberOfRouteTests * 4) /10;
         _isStart = false;
         generation = 0;
+        
+        _textGeneration.text = generation.ToString();
         currentTestRoute = numberOfRouteTests;
         bestDistance = 0;
         secondBestDistance = 0;
-        
+
+        _textBestRoute.text = bestDistance.ToString();
+        _textBestSecondBestRoute.text = secondBestDistance.ToString();
          points=new List<Transform>();
          bestRoute=new List<Transform>();
          secondBestRoute=new List<Transform>();
@@ -128,6 +158,7 @@ public class SetLines : MonoBehaviour
         if (_isStart)
         {
             generation ++;
+            _textGeneration.text = generation.ToString();
             currentTestRoute = 0;
         }
   
@@ -200,7 +231,7 @@ public class SetLines : MonoBehaviour
             //Debug.Log($"mutation");
 
             mutations++;            
-            
+            _textMutations.text = mutations.ToString();
             int randomIndex = Random.Range(1, points.Count-1);
             int newRandomIndex = Random.Range(1, points.Count-1);
             Transform  temp = points[newRandomIndex];
@@ -221,6 +252,7 @@ public class SetLines : MonoBehaviour
         if (distance<bestDistance&&distance>0f)
         {
             bestDistance = distance;
+            _textBestRoute.text = bestDistance.ToString();
             bestRoute = new List<Transform>();
             
             for (int i = 0; i < points.Count; i++)
@@ -236,6 +268,7 @@ public class SetLines : MonoBehaviour
             secondBestRoute = new List<Transform>();
             
             secondBestDistance = distance;
+            _textBestRoute.text = secondBestDistance.ToString();
             for (int i = 0; i < points.Count; i++)
             {
                 Transform  temp = points[i];
@@ -294,6 +327,6 @@ public class SetLines : MonoBehaviour
           
         }
         
-       newGeneration.Add(bestRoute[0]);
+       newGeneration.Add(points[0]);
     }
 }
