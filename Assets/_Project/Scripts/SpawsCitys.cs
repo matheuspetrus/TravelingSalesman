@@ -39,6 +39,8 @@ public class SpawsCitys : MonoBehaviour
             {
                 obj.GetComponent<City>().StartFlag();
             }
+
+            obj.name = $"city {i}";
             
             _set.AddPoint(obj.transform);
         }
